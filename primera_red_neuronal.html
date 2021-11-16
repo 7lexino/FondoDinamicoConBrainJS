@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="jscolor/jscolor.js"></script>
+    <script src="brain-browser.js"></script> 
+    <title>Document</title>
+</head>
+<body>
+    <div style="display:inline-block;">
+        <input class="jscolor {onFineChange: 'update(this)'}" value="cc66ff">
+    </div>
+    <div id="hola" style="display:inline-block; padding:20px; margin-left:50px; text-align:center; font-size: 40px; padding-left: 100px; padding-right: 100px;">
+        <h1>¡Hola Mundo!</h1>
+    </div>
+
+    <script>
+        //const brain = require('brain-browser.min.js');
+        //Iniciar la red neuronal
+        var red = new brain.NeuralNetwork();
+
+        //Entrenando la red
+        red.train([
+            {input: {rojo: 0, verde: 0, azul: 0}, output: {color: 1}},
+            {input: {rojo: 1, verde: 1, azul: 1}, output: {color: 0}},
+            {input: {rojo: 0, verde: 1, azul: 0}, output: {color: 0}},
+            //{input: {rojo: 0.6607500000000002, verde: 0.33037500000000003, azul: 0.8259375}, output: {color: 1}},
+        ])
+
+        function update(color){
+            //console.log(color.toString());
+            var holaDiv = document.getElementById("hola");
+            holaDiv.style.background = color.toString();
+            console.log(color.channels.r)
+
+            var entrada = {
+                rojo: color.channels.r / 255,
+                verde: color.channels.g / 255,
+                azul: color.channels.b / 255,
+            }
+            //console.log(entrada)
+
+            var resultado = red.run(entrada);
+
+            //console.log(resultado.color)
+
+            if(resultado.color > .5){
+                holaDiv.style.color = "white";
+            }else{
+                holaDiv.style.color = "black";
+            }
+        }
+        
+        
+    </script>
+</body>
+</html>
